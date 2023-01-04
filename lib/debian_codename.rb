@@ -10,9 +10,9 @@ module DebianCodename
     '12' => %w[bookworm],
     '11' => %w[bullseye],
     '10' => %w[buster],
-    '9'  => %w[stretch],
-    '8'  => %w[jessie],
-    '7'  => %w[wheezy],
+    '9' => %w[stretch],
+    '8' => %w[jessie],
+    '7' => %w[wheezy],
     '6.0' => %w[squeeze],
     '5.0' => %w[lenny],
     '4.0' => %w[etch],
@@ -68,17 +68,13 @@ module DebianCodename
   def fast_find(user_search_string)
     search_string = user_search_string.downcase
 
-    # Search hash keys
     [DEBIAN_CODENAMES, UBUNTU_CODENAMES].each do |code_catalog|
       return code_catalog[search_string][0] if code_catalog.key?(search_string)
-    end
 
-    # Search hash values
-    [DEBIAN_CODENAMES, UBUNTU_CODENAMES].each do |code_catalog|
-      key = code_catalog.find { |key, value| value[0] == search_string }
+      key = code_catalog.find { |_key, value| value[0] == search_string }
       return key.first unless key.nil?
     end
 
-    raise DebianCodenameError.new 'No match'
+    raise DebianCodenameError, 'No match'
   end
 end
