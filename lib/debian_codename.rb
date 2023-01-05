@@ -4,6 +4,8 @@ module DebianCodename
   class DebianCodenameError < StandardError; end
 
   # Codenames need to be all lower case
+
+  # https://wiki.debian.org/DebianReleases#Production_Releases
   DEBIAN_CODENAMES = {
     '14' => %w[forky],
     '13' => %w[trixie],
@@ -26,8 +28,14 @@ module DebianCodename
     '1.1' => %w[buzz]
   }.freeze
 
+  # https://wiki.ubuntu.com/DevelopmentCodeNames
+  # https://wiki.ubuntu.com/Releases
+  # Codename nouns ignored here at the moment but kept for consistency and possible future
+  # improvements
   UBUNTU_CODENAMES = {
     '23.04' => %w[lunar lobster],
+    '22.10' => %w[kinetic kudu],
+    '22.04' => %w[jammy jellyfish],
     '20.10' => %w[groovy gorilla],
     '20.04' => %w[focal fossa],
     '19.10' => %w[eoan ermine],
@@ -65,6 +73,8 @@ module DebianCodename
 
   module_function
 
+  # Whether version number or codename is the user_search_string, return the matching
+  # item.
   def fast_find(user_search_string)
     search_string = user_search_string.downcase
 
@@ -75,6 +85,6 @@ module DebianCodename
       return key.first unless key.nil?
     end
 
-    raise DebianCodenameError, 'No match'
+    raise DebianCodenameError, "No match for #{user_search_string}"
   end
 end
