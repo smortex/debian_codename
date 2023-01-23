@@ -65,16 +65,45 @@ module DebianCodename
 
   module_function
 
+  # Convert from version string to codename and vice versa
   def fast_find(user_search_string)
     search_string = user_search_string.downcase
 
     [DEBIAN_CODENAMES, UBUNTU_CODENAMES].each do |code_catalog|
-      return code_catalog[search_string][0] if code_catalog.key?(search_string)
+      return codename(code_catalog, search_string) if code_catalog.key?(search_string)
 
-      key = code_catalog.find { |_key, value| value[0] == search_string }
-      return key.first unless key.nil?
+      version_found = code_catalog.find { |_, value| value[0] == search_string }
+      return version_found.first unless version_found.nil?
     end
 
     raise DebianCodenameError, 'No match'
+  end
+
+  # Return a canonical form (Hash with ':version' and ':codename' keys)
+  def find(user_search_string)
+    search_string = user_search_string.downcase
+
+    [DEBIAN_CODENAMES, UBUNTU_CODENAMES].each do |code_catalog|
+      if code_catalog.key?(search_string)
+        return {
+          version: search_string,
+          codename: codename(code_catalog, search_string)
+        }
+      end
+
+      version_found = code_catalog.find { |_, value| value[0] == search_string }
+      unless version_found.nil?
+        return {
+          version: version_found.first,
+          codename: search_string
+        }
+      end
+    end
+
+    raise DebianCodenameError, 'No match'
+  end
+
+  def codename(code_catalog, version_string)
+    code_catalog[version_string][0]
   end
 end
