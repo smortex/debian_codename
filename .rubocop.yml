@@ -10,10 +10,12 @@ AllCops:
   - spec/**/*.rb
   - templates/*
   SuggestExtensions: false
-  TargetRubyVersion: 2.7.7
 
 Gemspec/DeprecatedAttributeAssignment:
   Enabled: true
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
 
 Gemspec/RequireMFA:
   Enabled: false
