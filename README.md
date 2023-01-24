@@ -20,17 +20,35 @@ Or install it yourself as:
 
 ## Usage
 
+### find
+
+Given a codename or a version string, `find` will return a hash with the codename, version string, and distribution name:
+
     require 'debian_codename'
 
-    def my_method
-      include DebianCodename
+    DebianCodename.find('groovy')
+    => {:version=>"20.10", :codename=>"groovy", :distribution=>"ubuntu"}
 
-      version = DebianCodename.fast_find('groovy')
-      # '20.10'
+    DebianCodename.fast_find('12')
+    => {:version=>"12", :codename=>"bookworm", :distribution=>"debian"}
 
-      codename = DebianCodename.fast_find('20.10')
-      # 'groovy'
-    end
+
+### fast_find
+
+Given a codename, `fast_find` will return the corresponding version string and vice-versa.
+
+    require 'debian_codename'
+
+    DebianCodename.fast_find('groovy')
+    => "20.10"
+
+    DebianCodename.fast_find('20.10')
+    => "groovy"
+
+
+## Errors
+
+Raises `DebianCodename::DebianCodenameError` if no match is found.
 
 ## Development
 

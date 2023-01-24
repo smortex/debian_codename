@@ -7,6 +7,7 @@ module DebianCodename
 
   # https://wiki.debian.org/DebianReleases#Production_Releases
   DEBIAN_CODENAMES = {
+    '@distribution' => 'debian',
     '14' => %w[forky],
     '13' => %w[trixie],
     '12' => %w[bookworm],
@@ -33,6 +34,7 @@ module DebianCodename
   # Codename nouns ignored here at the moment but kept for consistency and possible future
   # improvements
   UBUNTU_CODENAMES = {
+    '@distribution' => 'ubuntu',
     '23.04' => %w[lunar lobster],
     '22.10' => %w[kinetic kudu],
     '22.04' => %w[jammy jellyfish],
@@ -87,7 +89,7 @@ module DebianCodename
     raise DebianCodenameError, "No match for #{user_search_string}"
   end
 
-  # Return a canonical form (Hash with ':version' and ':codename' keys)
+  # Return a canonical form (Hash with ':version', ':codename', and ':distribution' keys)
   def find(user_search_string)
     search_string = user_search_string.downcase
 
@@ -95,7 +97,8 @@ module DebianCodename
       if code_catalog.key?(search_string)
         return {
           version: search_string,
-          codename: codename(code_catalog, search_string)
+          codename: codename(code_catalog, search_string),
+          distribution: distribution(code_catalog)
         }
       end
 
@@ -103,7 +106,8 @@ module DebianCodename
       unless version_found.nil?
         return {
           version: version_found.first,
-          codename: search_string
+          codename: search_string,
+          distribution: distribution(code_catalog)
         }
       end
     end
@@ -113,5 +117,9 @@ module DebianCodename
 
   def codename(code_catalog, version_string)
     code_catalog[version_string][0]
+  end
+
+  def distribution(code_catalog)
+    code_catalog['@distribution']
   end
 end
