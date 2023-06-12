@@ -10,11 +10,21 @@ RSpec.describe DebianCodename do
   end
 
   it 'can convert codename to canonical form' do
-    expect(DebianCodename.find('groovy')).to eq({ version: '20.10', codename: 'groovy' })
+    expect(DebianCodename.find('groovy'))
+      .to eq({
+               version: '20.10',
+               codename: 'groovy',
+               distribution: 'ubuntu'
+             })
   end
 
   it 'can convert version string to canonical form' do
-    expect(DebianCodename.find('20.10')).to eq({ version: '20.10', codename: 'groovy' })
+    expect(DebianCodename.find('12'))
+      .to eq({
+               version: '12',
+               codename: 'bookworm',
+               distribution: 'debian'
+             })
   end
 
   it 'throws DebianCodenameError when nothing is found' do
